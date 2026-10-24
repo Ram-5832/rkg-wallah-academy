@@ -768,5 +768,80 @@ document.getElementById("teacherLoginForm")
   </form>
 </section>
 
+<script>
+document.getElementById("liveClassForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("liveClassMessage");
+    message.textContent = "Creating class...";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        message.textContent = "Pehle Teacher Login karo.";
+        return;
+      }
+
+      const user = sessionData.session.user;
+
+      const { data: role, error: roleError } =
+        await supabaseClient
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", user.id)
+          .single();
+
+      if (roleError || role.role !== "teacher") {
+        message.textContent = "Sirf teacher class create kar sakta hai.";
+        return;
+      }
+
+      const className =
+        document.getElementById("liveClassName").value.trim();
+      const subject =
+        document.getElementById("liveSubject").value.trim();
+      const title =
+        document.getElementById("liveTitle").value.trim();
+
+      const roomName =
+        "rkg-wallah-" + Date.now() + "-" +
+        Math.random().toString(36).slice(2, 8);
+
+      const { error } = await supabaseClient
+        .from("live_classes")
+        .insert({
+          title: title,
+          class_name: className,
+          subject: subject,
+          room_name: roomName,
+          status: "live"
+        });
+
+      if (error) {
+        message.textContent = "Error: " + error.message;
+        return;
+      }
+
+      const meetingUrl = "https://meet.jit.si/" + roomName;
+
+      message.textContent = "Live class create ho gayi! ";
+
+      const link = document.createElement("a");
+      link.href = meetingUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Join Your Live Class";
+      message.appendChild(link);
+
+    } catch (error) {
+      message.textContent = "Error: " + error.message;
+    }
+  });
+</script>
+</body>
+
 </body>
 </html>
