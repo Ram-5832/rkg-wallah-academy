@@ -530,9 +530,15 @@
       dashboardTitle.textContent = `Class ${classNumber} — Subjects`;
 
       
-      const pdfLinks = {
-        "10-Physics": "class10-physics.pdf"
-      };
+     
+const pdfLinks = {
+  "6-Mathematics": "class6-maths.pdf",
+  "6-Science": "class6-science.pdf",
+  "7-Mathematics": "class7-maths.pdf",
+  "10-Physics": "class10-physics.pdf",
+  "12-Chemistry": "class12-chemistry.pdf"
+};
+
 
       subjectGrid.innerHTML = subjects.map(subject => {
         const key = `${classNumber}-${subject.name}`;
