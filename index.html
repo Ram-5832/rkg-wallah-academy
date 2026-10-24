@@ -745,5 +745,28 @@ document.getElementById("teacherLoginForm")
   });
 </script>
 
+<!-- Teacher Live Class Form -->
+<section id="start-live-class" style="max-width:500px;margin:30px auto;padding:24px;border:1px solid #ddd;border-radius:12px;font-family:Arial,sans-serif;">
+  <h2>🎥 Start Live Class</h2>
+  <form id="liveClassForm">
+    <label>Class Name</label>
+    <input id="liveClassName" required placeholder="Class 10"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box;">
+
+    <label>Subject</label>
+    <input id="liveSubject" required placeholder="Physics"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box;">
+
+    <label>Lecture Title</label>
+    <input id="liveTitle" required placeholder="Chapter 1"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box;">
+
+    <button type="submit" style="padding:12px 18px;background:#16803c;color:white;border:0;border-radius:6px;">
+      Create Live Class
+    </button>
+    <p id="liveClassMessage" role="status"></p>
+  </form>
+</section>
+
 </body>
 </html>
