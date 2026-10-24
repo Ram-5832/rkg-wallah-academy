@@ -869,5 +869,69 @@ document.getElementById("liveClassForm")
   <p id="studentAuthMessage" role="status"></p>
 </section>
 
+<script>
+document.getElementById("studentRegisterBtn")
+  .addEventListener("click", async function() {
+    const email = document.getElementById("studentEmail").value.trim();
+    const password = document.getElementById("studentPassword").value;
+    const message = document.getElementById("studentAuthMessage");
+
+    if (!email || password.length < 6) {
+      message.textContent = "Valid email aur kam se kam 6 character ka password daalo.";
+      return;
+    }
+
+    message.textContent = "Registering...";
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = "Registration error: " + error.message;
+      return;
+    }
+
+    message.textContent = data.session
+      ? "Registration successful! Ab Student Login kar sakte ho."
+      : "Registration request successful! Email verification ke liye apna inbox check karo.";
+  });
+
+document.getElementById("studentLoginBtn")
+  .addEventListener("click", async function() {
+    const email = document.getElementById("studentEmail").value.trim();
+    const password = document.getElementById("studentPassword").value;
+    const message = document.getElementById("studentAuthMessage");
+
+    message.textContent = "Logging in...";
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = "Login error: " + error.message;
+      return;
+    }
+
+    const { data: roleData, error: roleError } = await supabaseClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", data.user.id)
+      .single();
+
+    if (roleError || roleData.role !== "student") {
+      await supabaseClient.auth.signOut();
+      message.textContent = "Student account verify nahi hua.";
+      return;
+    }
+
+    message.textContent = "Student login successful! Ab Live Classes join kar sakte ho.";
+  });
+</script>
+</body>
+
 </body>
 </html>
