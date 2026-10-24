@@ -529,15 +529,41 @@
 
       dashboardTitle.textContent = `Class ${classNumber} — Subjects`;
 
-      subjectGrid.innerHTML = subjects.map(subject => `
-        <article class="subject-card">
-          <span class="subject-icon">${subject.icon}</span>
-          <div>
-            <strong>${subject.name}</strong>
-            <small>Lectures & notes coming soon</small>
-          </div>
-        </article>
-      `).join("");
+      
+      const pdfLinks = {
+        "10-Physics": "class10-physics.pdf"
+      };
+
+      subjectGrid.innerHTML = subjects.map(subject => {
+        const key = `${classNumber}-${subject.name}`;
+        const pdf = pdfLinks[key];
+
+        const lectureUrl =
+          "https://www.youtube.com/results?search_query=" +
+          encodeURIComponent(
+            `Class ${classNumber} ${subject.name} lecture Hindi`
+          );
+
+        return `
+          <article class="subject-card">
+            <span class="subject-icon">${subject.icon}</span>
+            <div>
+              <strong>${subject.name}</strong>
+              <p>
+                <a href="${lectureUrl}" target="_blank" rel="noopener noreferrer">
+                  ▶ Watch Lectures
+                </a>
+              </p>
+              ${
+                pdf
+                  ? `<p><a href="${pdf}" target="_blank">📄 Open PDF Notes</a></p>`
+                  : `<small>PDF notes coming soon</small>`
+              }
+            </div>
+          </article>
+        `;
+      }).join("");
+
 
       dashboard.classList.remove("hidden");
       dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
