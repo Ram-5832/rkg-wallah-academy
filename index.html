@@ -592,6 +592,87 @@ const pdfLinks = {
 
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+          
+  <!-- RKG Wallah Academy Live Classes -->
+  <section id="rkg-live-classes" style="padding:24px;max-width:1000px;margin:auto;font-family:Arial,sans-serif;">
+    <h2>🎥 Live Classes</h2>
+    <p>Apni class select karo aur live lecture join karo.</p>
+    <div id="rkg-class-list">Loading classes...</div>
+    <p id="rkg-class-error" style="color:red;"></p>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+  (async function () {
+    const SUPABASE_URL = "https://qonvxdqbylrwrwdebgok.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_e4w25X6-VvoT54cw3Cn1dA_9QB5zVbB";
+
+    const list = document.getElementById("rkg-class-list");
+    const error = document.getElementById("rkg-class-error");
+
+    try {
+      const db = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      const { data, error: dbError } = await db
+        .from("live_classes")
+        .select("id, title, class_name, subject, room_name, status")
+        .order("created_at", { ascending: false });
+
+      if (dbError) throw dbError;
+
+      list.replaceChildren();
+
+      if (!data || data.length === 0) {
+        list.textContent = "Abhi koi live class available nahi hai.";
+        return;
+      }
+
+      data.forEach(function (item) {
+        const card = document.createElement("div");
+        card.style.cssText =
+          "border:1px solid #ddd;border-radius:12px;padding:16px;margin:12px 0;";
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const details = document.createElement("p");
+        details.textContent = item.class_name + " • " + item.subject;
+
+        const status = document.createElement("p");
+        status.textContent =
+          item.status === "live" ? "🔴 LIVE NOW" :
+          item.status === "ended" ? "Class ended" : "Scheduled";
+
+        card.append(title, details, status);
+
+        if (item.status !== "ended") {
+          const join = document.createElement("a");
+          join.textContent = "▶ Join Live Class";
+          join.href = "https://meet.jit.si/" +
+            encodeURIComponent(item.room_name);
+          join.target = "_blank";
+          join.rel = "noopener noreferrer";
+          join.style.cssText =
+            "display:inline-block;background:#2563eb;color:white;" +
+            "padding:10px 16px;border-radius:8px;text-decoration:none;";
+
+          card.appendChild(join);
+        }
+
+        list.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      list.textContent = "Classes load nahi ho paayin.";
+      error.textContent =
+        "Supabase table aur permissions check karo.";
+    }
+  })();
+  </script>
 
 </body>
 </html>
