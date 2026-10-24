@@ -953,5 +953,24 @@ document.getElementById("studentLoginBtn")
   <p id="studentDashboardMessage" role="status"></p>
 </section>
 <!-- END STUDENT DASHBOARD -->
+  
+<script>
+document.getElementById("studentLogoutBtn")
+  .addEventListener("click", async function () {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      document.getElementById("studentDashboardMessage").textContent =
+        "Logout error: " + error.message;
+      return;
+    }
+
+    document.getElementById("student-dashboard").style.display = "none";
+    document.getElementById("student-auth").style.display = "block";
+    document.getElementById("studentAuthMessage").textContent =
+      "Logout successful!";
+  });
+</script>
+
 </body>
 </html>
