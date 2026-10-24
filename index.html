@@ -842,5 +842,32 @@ document.getElementById("liveClassForm")
   });
 </script>
 
+<!-- Student Registration and Login -->
+<section id="student-auth" style="max-width:500px;margin:30px auto;padding:24px;border:1px solid #ddd;border-radius:12px;font-family:Arial,sans-serif;">
+  <h2>🎓 Student Registration / Login</h2>
+
+  <label for="studentEmail">Email</label>
+  <input id="studentEmail" type="email" required
+    placeholder="Enter your email"
+    style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+  <label for="studentPassword">Password</label>
+  <input id="studentPassword" type="password" required minlength="6"
+    placeholder="At least 6 characters"
+    style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+  <button id="studentRegisterBtn" type="button"
+    style="padding:12px;background:#16803c;color:white;border:0;border-radius:6px;">
+    Register
+  </button>
+
+  <button id="studentLoginBtn" type="button"
+    style="padding:12px;background:#1769e0;color:white;border:0;border-radius:6px;">
+    Student Login
+  </button>
+
+  <p id="studentAuthMessage" role="status"></p>
+</section>
+
 </body>
 </html>
