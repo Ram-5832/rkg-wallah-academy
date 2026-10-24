@@ -697,5 +697,53 @@ const pdfLinks = {
   </form>
 </section>
 
+<!-- Supabase Login Connection -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = window.supabase.createClient(
+  "https://qonvxdqbylrwrwdebgok.supabase.co",
+  "sb_publishable_e4w25X6-VvoT54cw3Cn1dA_9QB5zVbB"
+);
+
+document.getElementById("teacherLoginForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("teacherLoginMessage");
+    const email = document.getElementById("teacherEmail").value.trim();
+    const password = document.getElementById("teacherPassword").value;
+
+    message.textContent = "Logging in...";
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+      message.textContent = "Login failed: " + error.message;
+      return;
+    }
+
+    const { data: roleData, error: roleError } =
+      await supabaseClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .single();
+
+    if (roleError || roleData.role !== "teacher") {
+      await supabaseClient.auth.signOut();
+      message.textContent = "Teacher access nahi mila.";
+      return;
+    }
+
+    message.textContent =
+      "Teacher login successful! Agla step: Live Class Dashboard.";
+  });
+</script>
+
 </body>
 </html>
