@@ -931,6 +931,25 @@ document.getElementById("studentLoginBtn")
     message.textContent = "Student login successful! Ab Live Classes join kar sakte ho.";
   });
 </script>
+<!-- STUDENT DASHBOARD -->
+<section id="student-dashboard" style="display:none;max-width:900px;margin:30px auto;padding:25px;font-family:Arial,sans-serif;background:#f4f7fb;border-radius:15px;">
 
+  <h2 style="color:#173b75;">🎓 Student Dashboard</h2>
+  <p>Welcome to RKG Wallah Academy!</p>
+
+  <div style="background:white;padding:20px;border-radius:10px;margin:20px 0;">
+    <h3>📚 My Learning</h3>
+    <p>Yahan tum apni available live classes dekh sakoge.</p>
+    <p>Apni class select karke live lecture join karo.</p>
+  </div>
+
+  <button id="studentLogoutBtn" type="button"
+    style="background:#dc2626;color:white;border:0;padding:12px 20px;border-radius:7px;cursor:pointer;">
+    Logout
+  </button>
+
+  <p id="studentDashboardMessage" role="status"></p>
+</section>
+<!-- END STUDENT DASHBOARD -->
 </body>
 </html>
