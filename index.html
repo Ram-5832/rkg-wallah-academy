@@ -674,5 +674,28 @@ const pdfLinks = {
   })();
   </script>
 
+<!-- Teacher Login Section -->
+<section id="teacher-login" style="max-width:500px;margin:30px auto;padding:24px;border:1px solid #ddd;border-radius:12px;font-family:Arial,sans-serif;">
+  <h2>👨‍🏫 Teacher Login</h2>
+  <p>Login karke apni live class start karein.</p>
+
+  <form id="teacherLoginForm">
+    <label for="teacherEmail">Email</label>
+    <input id="teacherEmail" type="email" required
+      placeholder="Teacher email"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <label for="teacherPassword">Password</label>
+    <input id="teacherPassword" type="password" required
+      placeholder="Password"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <button type="submit" style="padding:12px 20px;background:#1769e0;color:white;border:0;border-radius:6px;cursor:pointer;">
+      Login
+    </button>
+    <p id="teacherLoginMessage" role="status"></p>
+  </form>
+</section>
+
 </body>
 </html>
