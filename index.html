@@ -996,8 +996,10 @@ document.getElementById("studentLogoutBtn")
 </script>
 
 <script>
+
 async function loadStudentLiveClasses() {
-  const container = document.getElementById("student-live-classes");
+  const list = document.getElementById("student-live-classes-list");
+  const filter = document.getElementById("studentClassFilter");
 
   const { data, error } = await supabaseClient
     .from("live_classes")
@@ -1005,52 +1007,61 @@ async function loadStudentLiveClasses() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    container.innerHTML =
-      "<h3>📺 Available Live Classes</h3><p>Classes load nahi ho paayi. Dobara try karo.</p>";
+    list.textContent = "Live classes load nahi ho paayi. Dobara try karo.";
     console.error("Live classes error:", error.message);
     return;
   }
 
-  if (!data || data.length === 0) {
-    container.innerHTML =
-      "<h3>📺 Available Live Classes</h3><p>Abhi koi class available nahi hai.</p>";
-    return;
-  }
+  function renderClasses() {
+    const selectedClass = filter.value;
+    const filtered = (data || []).filter(function (item) {
+      return selectedClass === "all" ||
+        item.class_name === selectedClass;
+    });
 
-  container.innerHTML = "<h3>📺 Available Live Classes</h3>";
+    list.replaceChildren();
 
-  data.forEach(function (item) {
-    const card = document.createElement("div");
-    card.style.cssText =
-      "background:white;padding:15px;margin:12px 0;border-radius:8px;";
-
-    const heading = document.createElement("h4");
-    heading.textContent = item.title || "Live Class";
-
-    const details = document.createElement("p");
-    details.textContent =
-      "Class: " + (item.class_name || "N/A") +
-      " | Subject: " + (item.subject || "N/A") +
-      " | Status: " + (item.status || "scheduled");
-
-    const join = document.createElement("a");
-    join.textContent = "Join Class";
-    join.href = "https://meet.jit.si/" + encodeURIComponent(item.room_name || "");
-    join.target = "_blank";
-    join.rel = "noopener noreferrer";
-    join.style.cssText =
-      "display:inline-block;background:#2563eb;color:white;padding:10px 15px;border-radius:6px;text-decoration:none;";
-
-    card.appendChild(heading);
-    card.appendChild(details);
-
-    if (item.room_name) {
-      card.appendChild(join);
+    if (filtered.length === 0) {
+      list.textContent = "Is class ke liye abhi koi live class available nahi hai.";
+      return;
     }
 
-    container.appendChild(card);
-  });
+    filtered.forEach(function (item) {
+      const card = document.createElement("div");
+      card.style.cssText =
+        "background:white;padding:15px;margin:12px 0;border-radius:8px;";
+
+      const heading = document.createElement("h4");
+      heading.textContent = item.title || "Live Class";
+
+      const details = document.createElement("p");
+      details.textContent =
+        "Class: " + (item.class_name || "N/A") +
+        " | Subject: " + (item.subject || "N/A") +
+        " | Status: " + (item.status || "scheduled");
+
+      card.append(heading, details);
+
+      if (item.room_name) {
+        const join = document.createElement("a");
+        join.textContent = "Join Class";
+        join.href = "https://meet.jit.si/" +
+          encodeURIComponent(item.room_name);
+        join.target = "_blank";
+        join.rel = "noopener noreferrer";
+        join.style.cssText =
+          "display:inline-block;background:#2563eb;color:white;padding:10px 15px;border-radius:6px;text-decoration:none;";
+        card.appendChild(join);
+      }
+
+      list.appendChild(card);
+    });
+  }
+
+  filter.addEventListener("change", renderClasses);
+  renderClasses();
 }
+
 </script>
 
 </body>
